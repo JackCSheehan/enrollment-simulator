@@ -14,8 +14,6 @@
 
     margin-top: 10px;
     margin-bottom: 10px;
-
-    vertical-align: middle;
 }
 
 .semester-editor
@@ -58,7 +56,6 @@ td:first-child
     font-size: 16px;
 
     margin-top: 15px;
-    margin-bottom: 15px;
 }
 
 .add-row-button
@@ -86,4 +83,19 @@ td:first-child
 {
     width: 45px;
     height: 45px;
+}
+
+.remove-row-button
+{
+    position: relative;
+
+    margin-left: -40px;
+
+    vertical-align: middle;
+}
+
+.remove-row-button-icon
+{
+    width: 20px;
+    height: 20px;
 }
