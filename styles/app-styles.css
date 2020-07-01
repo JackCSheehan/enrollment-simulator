@@ -40,6 +40,18 @@ td:first-child
     border-right: 1px solid #121267;
 }
 
+/*
+Property needed as a workaround to a Firefox bug where table borders are incorrectly rendered.
+The borders in the semester editor are simply disabled.
+*/
+@-moz-document url-prefix()
+{
+    th, td:first-child
+    {
+        border: none;
+    }
+}
+
 .semester-table
 {
     width: 100%;
