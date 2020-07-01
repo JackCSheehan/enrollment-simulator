@@ -1,0 +1,82 @@
+#app
+{
+    text-align: center;
+}
+
+#goal-hours-input
+{
+    margin-top: 2%;
+}
+
+.semester-title-input
+{
+    width: 85%;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.semester-editor
+{
+    width: 35%;
+    min-width: 600px;
+
+    margin-top: 4%;
+    margin-bottom: 4%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+th
+{
+    font-size: 22px;
+    color: #121267;
+
+    border-bottom: 1px solid #121267;
+}
+
+td:first-child
+{
+    border-right: 1px solid #121267;
+}
+
+.semester-table
+{
+    width: 100%;
+
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+
+    border-collapse: collapse;
+}
+
+.semester-editor-inputs
+{
+    font-size: 16px;
+
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.add-row-button
+{
+    margin-left: auto;
+    margin-right: auto;
+
+    text-align: center;
+
+    background-color: transparent;
+
+    border: none;
+
+    cursor: pointer;
+}
+
+.add-row-button-icon
+{
+    width: 50px;
+    height: 50px;
+
+    margin-top: 10px;
+}

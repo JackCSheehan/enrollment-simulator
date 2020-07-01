@@ -1,6 +1,15 @@
+/*
+Styles for global things and also styles for elements needed multiple times, such as inputs.
+*/
 *
 {
     font-family: "Open Sans", sans-serif;
+}
+
+html, body
+{
+    margin: 0;
+    padding: 0;
 }
 
 .card
@@ -8,6 +17,39 @@
     padding: 10px;
 
     border-radius: 20px;
+
+    box-shadow: 0px 0px 20px #00000040;
+}
+
+.text-input
+{
+    font-size: 18px;
+    color: black;
+
+    padding: 8px;
+
+    border: 1px solid #121267;
+    border-radius: 20px;
+
+    box-shadow: 0px 0px 20px #00000040;
+}
+
+.submit
+{
+    font-size:  18px;
+    color: white;
+
+    background-color: #121267;
+
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    border: none;
+    border-radius: 20px;
+
+    cursor: pointer;
 
     box-shadow: 0px 0px 20px #00000040;
 }

@@ -9,6 +9,7 @@
 
         <link rel="stylesheet" href="styles/main-styles.css">
         <link rel="stylesheet" href="styles/navbar-styles.css">
+        <link rel="stylesheet" href="styles/app-styles.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Molle:ital@1&family=Open+Sans&display=swap"> 
     </head>
 
@@ -25,8 +26,39 @@
                 About
             </span>
         </div>
-        <div class="card">
-            Test of card formatting
+        
+        <!--Div for main app-->
+        <div id="app">
+            <input id="goal-hours-input" class="text-input" placeholder="Goal Hours...">
+
+            <div class="semester-editor card">
+                <input class="semester-title-input text-input" placeholder="Semester...">
+
+                <table class="semester-table">
+                    <tr>
+                        <th>Course Number</th>
+                        <th>Credit Hours</th>
+                    </tr>
+
+                    <tr>
+                        <td><input class="course-number-input semester-editor-inputs text-input" placeholder="Course Number..."></td>
+                        <td><input class="credit-hours-input semester-editor-inputs text-input" placeholder="Credit Hours..."></td>
+                    </tr>
+                </table>
+
+                <button class="add-row-button">
+                    <img class="add-row-button-icon" src="images/add.png">
+                </button>
+            </div>
+
+            <input type="submit" id="add-semseter-button" class="submit" value="Add Semester">
+        </div>
+
+        <!--Div for stat cards-->
+        <div id="stats">
+            <button id="html-download" class="submit">Download as HTML</button>
+            <button id="pdf-download" class="submit">Download as PDF</button>
+            <button id="text-download" class="submit">Download as Text</button>
         </div>
         
     </body>
