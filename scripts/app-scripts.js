@@ -41,6 +41,60 @@ function init()
 }
 
 /*
+Add event listeners to all remove row buttons.
+*/
+function addRemoveRowButtonEventListeners()
+{
+    var dataRows = document.getElementsByClassName("remove-row-button");
+    for (var count = 0; count < dataRows.length; count++)
+    {
+        dataRows[count].addEventListener("click", function()
+        {
+            removeRow(this);
+        });
+    }
+}
+
+/*
+Add event listener to each remove semester button
+*/
+function addRemoveSemesterEventListeners()
+{
+    var removeSemesterButtons = document.getElementsByClassName("remove-semester-button");
+    for (var count = 0; count < removeSemesterButtons.length; count++)
+    {
+        removeSemesterButtons[count].addEventListener("click", removeSemester);
+    }
+}
+
+/*
+Add event listener to each add row button
+*/
+function addAddRowEventListeners(dataRowHTML)
+{
+    var addRowButtons = document.getElementsByClassName("add-row-button");
+    for (var count = 0; count < addRowButtons.length; count++)
+    {
+        addRowButtons[count].addEventListener("click", function()
+        {
+            addRow(this, dataRowHTML);
+        });
+    }
+}
+
+/*
+Add event listeners to every course number input.
+*/
+function addCourseNumberInputEventListeners()
+{
+    var courseNumberInputs = document.getElementsByClassName("course-number-input");
+    for (var count = 0; count < courseNumberInputs.length; count++)
+    {
+        courseNumberInputs[count].addEventListener("input", extractCreditHours)
+    }
+}
+
+/*
 Adds a row to the selected semester editor.
 */
 function addRow(button, dataRowHTML)
@@ -51,15 +105,8 @@ function addRow(button, dataRowHTML)
     // Add row to table
     table.innerHTML += dataRowHTML;
 
-    // Add event listeners to all new data rows
-    var dataRows = document.getElementsByClassName("remove-row-button");
-    for (var count = 0; count < dataRows.length; count++)
-    {
-        dataRows[count].addEventListener("click", function()
-        {
-            removeRow(this);
-        });
-    }
+    addRemoveRowButtonEventListeners()
+    addCourseNumberInputEventListeners()
 }
 
 /*
@@ -73,6 +120,7 @@ function removeRow(button)
     // Get the current semester editor
     var semesterEditor = currentRow.parentNode.parentNode;
     
+    // Make sure that there are at least more than one data row before removing
     if (semesterEditor.getElementsByClassName("data-row").length > 1)
     {
         currentRow.parentNode.removeChild(currentRow);
@@ -95,41 +143,70 @@ function addSemester(semesterEditorHTML)
     // Get div to append new semester editor to
     var semesterEditorWrapper = document.getElementById("semester-editor-wrapper");
 
-    // Add template HTML to wrapper div
-    semesterEditorWrapper.innerHTML += semesterEditorHTML;
+    // Create elements needed to add a new semester card to the div
+    var semesterEditorCardDivElement = document.createElement("div");
+    semesterEditorCardDivElement.className = "semester-editor card";
+
+    var semesterTitleInputElement = document.createElement("input");
+    semesterTitleInputElement.className = "semester-title-input text-input";
+    semesterTitleInputElement.placeholder = "Semester...";
+
+    var removeSemesterButtonElement = document.createElement("button");
+    removeSemesterButtonElement.className = "remove-semester-button icon-button";
+
+    var removeSemesterButtonIconElement = document.createElement("img");
+    removeSemesterButtonIconElement.className = "remove-semester-button-icon";
+    removeSemesterButtonIconElement.src = "images/close.svg";
+
+    removeSemesterButtonElement.appendChild(removeSemesterButtonIconElement);
+
+    // Create semester data table elements
+    var semesterTableElement = document.createElement("table");
+    semesterTableElement.className = "semester-table";
+
+    var tableHeaderRowElement = document.createElement("tr");
+
+    var courseNumberHeaderElement = document.createElement("th");
+    courseNumberHeaderElement.appendChild(document.createTextNode("Course Number"));
+
+    var creditHoursHeaderElement = document.createElement("th");
+    creditHoursHeaderElement.appendChild(document.createTextNode("Credit Hours"));
+
+    // Append headers to create first table row
+    tableHeaderRowElement.appendChild(courseNumberHeaderElement);
+    tableHeaderRowElement.appendChild(creditHoursHeaderElement);
+
+    // Create elements needed for the first data row of table
+    var firstDataRowElement = document.createElement("tr");
+    
+    var removeRowButtonElement = document.createElement("button");
+    removeRowButtonElement.className = "remove-row-button icon-button";
+
+    var removeRowButtonIconElement = document.createElement("img");
+    removeRowButtonIconElement.className = "remove-row-button-icon";
+    removeRowButtonIconElement.src = "images/close.svg";
+
+    removeRowButtonElement.appendChild(removeRowButtonIconElement);
+
+    var courseNumberInputElement = document.createElement("input");
+    courseNumberInputElement.className = "course-number-input semester-editor-inputs text-input";
+    courseNumberInputElement.placeholder = "Course Number...";
+
+    // Add remove button and input to course number data row element
+
+    var creditHoursDataColumn = document.createElement("td");
 
     // Scroll down to newly added semester editor card
     location.hash = "#" + "new-semester";
 
-    // Add event listener to each remove semester button
-    var removeSemesterButtons = document.getElementsByClassName("remove-semester-button");
-    for (var count = 0; count < removeSemesterButtons.length; count++)
-    {
-        removeSemesterButtons[count].addEventListener("click", removeSemester);
-    }
+    addRemoveSemesterEventListeners()
 
     // Get template HTML for semester editor data row
     var dataRowHTML = document.getElementsByClassName("data-row")[0].outerHTML;
 
-    // Add event listener to each add row button
-    var addRowButtons = document.getElementsByClassName("add-row-button");
-    for (var count = 0; count < addRowButtons.length; count++)
-    {
-        addRowButtons[count].addEventListener("click", function()
-        {
-            addRow(this, dataRowHTML);
-        });
-    }
-
-    // Add event listener to each remove row button
-    var dataRows = document.getElementsByClassName("remove-row-button");
-    for (var count = 0; count < dataRows.length; count++)
-    {
-        dataRows[count].addEventListener("click", function()
-        {
-            removeRow(this);
-        });
-    }
+    addAddRowEventListeners(dataRowHTML)
+    addRemoveRowButtonEventListeners()
+    addCourseNumberInputEventListeners()
 }
 
 /*
