@@ -140,13 +140,7 @@ This function adds a new empty semester editor.
 */
 function addSemester(semesterEditorHTML)
 {
-    // Get div to append new semester editor to
-    var semesterEditorWrapper = document.getElementById("semester-editor-wrapper");
-
     // Create elements needed to add a new semester card to the div
-    var semesterEditorCardDivElement = document.createElement("div");
-    semesterEditorCardDivElement.className = "semester-editor card";
-
     var semesterTitleInputElement = document.createElement("input");
     semesterTitleInputElement.className = "semester-title-input text-input";
     semesterTitleInputElement.placeholder = "Semester...";
@@ -175,10 +169,8 @@ function addSemester(semesterEditorHTML)
     // Append headers to create first table row
     tableHeaderRowElement.appendChild(courseNumberHeaderElement);
     tableHeaderRowElement.appendChild(creditHoursHeaderElement);
-
-    // Create elements needed for the first data row of table
-    var firstDataRowElement = document.createElement("tr");
     
+    // Create elements needed for course number data column
     var removeRowButtonElement = document.createElement("button");
     removeRowButtonElement.className = "remove-row-button icon-button";
 
@@ -192,9 +184,54 @@ function addSemester(semesterEditorHTML)
     courseNumberInputElement.className = "course-number-input semester-editor-inputs text-input";
     courseNumberInputElement.placeholder = "Course Number...";
 
-    // Add remove button and input to course number data row element
+    // Create course number data column and add remove button and input to it
+    var courseNumberDataColumn = document.createElement("td");
+    courseNumberDataColumn.appendChild(removeRowButtonElement);
+    courseNumberDataColumn.appendChild(courseNumberInputElement);
 
+    // Create elements needed for credit hour data column
+    var creditHoursInputElement = document.createElement("input");
+    creditHoursInputElement.className = "credit-hours-input semester-editor-inputs text-input";
+    creditHoursInputElement.placeholder = "Credit Hours...";
+
+    // Create credit hours data column and add credit hours input to it
     var creditHoursDataColumn = document.createElement("td");
+    creditHoursDataColumn.appendChild(creditHoursInputElement);
+
+    // Create first table row element and add the table data columns to it
+    var firstDataRowElement = document.createElement("tr");
+    firstDataRowElement.appendChild(courseNumberDataColumn);
+    firstDataRowElement.appendChild(creditHoursDataColumn);
+
+    // Append table elements to table element
+    semesterTableElement.appendChild(tableHeaderRowElement);
+    semesterTableElement.appendChild(firstDataRowElement);
+
+    // Create button to add a new row
+    var addNewRowButton = document.createElement("button");
+    addNewRowButton.className = "add-row-button icon-button";
+
+    var addNewRowButtonIcon = document.createElement("img");
+    addNewRowButtonIcon.className = "add-row-button-icon";
+    addNewRowButtonIcon.src = "images/add.png";
+
+    addNewRowButton.appendChild(addNewRowButtonIcon);
+
+    // Get div to append new semester editor to
+    var semesterEditorWrapper = document.getElementById("semester-editor-wrapper");
+
+    // Create semester editor card element that contains all new elements
+    var semesterEditorCardDivElement = document.createElement("div");
+    semesterEditorCardDivElement.className = "semester-editor card";
+
+    // Add created elements to semester editor card element
+    semesterEditorCardDivElement.appendChild(semesterTitleInputElement);
+    semesterEditorCardDivElement.appendChild(removeSemesterButtonElement);
+    semesterEditorCardDivElement.appendChild(semesterTableElement);
+    semesterEditorCardDivElement.appendChild(addNewRowButton);
+
+    // Append created semester editor to the semester editor wrapper
+    semesterEditorWrapper.appendChild(semesterEditorCardDivElement);
 
     // Scroll down to newly added semester editor card
     location.hash = "#" + "new-semester";
