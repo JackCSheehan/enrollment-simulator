@@ -1,3 +1,6 @@
+
+
+
 /*
 Counts the number of courses input by the user into the app. Returns the number of courses input
 */

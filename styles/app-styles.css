@@ -111,3 +111,18 @@ The borders in the semester editor are simply disabled.
     width: 20px;
     height: 20px;
 }
+
+
+.semester-credit-count-label
+{
+    font-weight: bold;
+    color: #121267;
+
+
+}
+.semester-credit-count-wrapper
+{
+    margin-top: 20px;
+    
+    font-size: 20px;
+}

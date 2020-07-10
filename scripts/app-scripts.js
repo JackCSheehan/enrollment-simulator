@@ -27,7 +27,7 @@ function init()
     // Add event listener to first add row button
     document.getElementsByClassName("add-row-button")[0].addEventListener("click", function()
     {
-        addRow(this, dataRowHTML);
+        addRow(this);
     });
 
     // Add event listener to first remove row button
@@ -38,6 +38,17 @@ function init()
 
     // Add event listener to first course number input
     document.getElementsByClassName("course-number-input")[0].addEventListener("input", extractCreditHours);
+
+    // Add event listener to first credit hour input and the first course number input
+    document.getElementsByClassName("credit-hours-input")[0].addEventListener("input", function()
+    {
+        updateSemesterCreditCount(this);
+    });
+
+    document.getElementsByClassName("course-number-input")[0].addEventListener("input", function()
+    {
+        updateSemesterCreditCount(this);
+    });
 }
 
 /*
@@ -70,14 +81,14 @@ function addRemoveSemesterEventListeners()
 /*
 Add event listener to each add row button
 */
-function addAddRowEventListeners(dataRowHTML)
+function addAddRowEventListeners()
 {
     var addRowButtons = document.getElementsByClassName("add-row-button");
     for (var count = 0; count < addRowButtons.length; count++)
     {
         addRowButtons[count].addEventListener("click", function()
         {
-            addRow(this, dataRowHTML);
+            addRow(this);
         });
     }
 }
@@ -95,18 +106,121 @@ function addCourseNumberInputEventListeners()
 }
 
 /*
+Add event listeners to every credit hour input and course number input to update the counter.
+*/
+function addUpdateSemesterCreditCountEventListeners()
+{
+    // Get all the credit hour inputs
+    var creditHourInputs = document.getElementsByClassName("credit-hours-input");
+
+    // Iterate through each credit hour input and add the event listeners
+    for (var count = 0; count < creditHourInputs.length; count++)
+    {
+        creditHourInputs[count].addEventListener("input", function()
+        {
+            updateSemesterCreditCount(creditHourInputs[count]);
+        });
+    }
+
+    // Get course number inputs
+    var courseNumberInputs = document.getElementsByClassName("course-number-input");
+    // Iterate through each course number input and add the event listeners
+    for (var count = 0; count < courseNumberInputs.length; count++)
+    {
+        courseNumberInputs[count].addEventListener("input", function()
+        {
+            updateSemesterCreditCount(creditHourInputs[count]);
+        });
+    }
+}
+
+/*
+Updates the count of credit hours under each semester editor.
+*/
+function updateSemesterCreditCount(creditHourInput)
+{
+    // Declare variable to accumulate credit hours in the current semester editor
+    var hours = 0;
+
+    // Regex search string to check for non-digits in input
+    var numberSearch = /[^0-9]+/g;
+
+    // Get current semester editor
+    var semesterEditor = creditHourInput.parentNode.parentNode.parentNode.parentNode.parentNode;
+
+    // Get the semester credit count element
+    var semesterCreditCountElement = semesterEditor.getElementsByClassName("semester-credit-count")[0];
+
+    // Get all credit hour inputs in the current semester editor
+    var creditHourInputs = semesterEditor.getElementsByClassName("credit-hours-input semester-editor-inputs text-input");
+
+    // Iterate through each credit hours input and accumulate the values
+    for (var count = 0; count < creditHourInputs.length; count++)
+    {
+        // Check to make sure that the current credit hour input only contains numbers
+        if (creditHourInputs[count].textContent.search(numberSearch) == -1)
+        {
+            hours += parseInt(creditHourInputs[count].value);
+        }
+    }
+    semesterCreditCountElement.textContent = hours;
+}
+
+/*
 Adds a row to the selected semester editor.
 */
-function addRow(button, dataRowHTML)
+function addRow(button)
 {
-    // Get table to add row to
-    var table = button.previousSibling.previousSibling;
-    
-    // Add row to table
-    table.innerHTML += dataRowHTML;
+    // Get the semester table to append a new row to
+    semesterTableElement = button.previousSibling;
 
-    addRemoveRowButtonEventListeners()
-    addCourseNumberInputEventListeners()
+    // If the previous element is a text node, the element before that one must be used
+    // (used to get around a quirk where whitespace nodes are automatically put into HTML source)
+    if (semesterTableElement.nodeType == 3)
+    {
+        semesterTableElement = semesterTableElement.previousSibling;
+    }
+
+    // Create elements needed for course number data column
+    var removeRowButtonElement = document.createElement("button");
+    removeRowButtonElement.className = "remove-row-button icon-button";
+
+    var removeRowButtonIconElement = document.createElement("img");
+    removeRowButtonIconElement.className = "remove-row-button-icon";
+    removeRowButtonIconElement.src = "images/close.svg";
+
+    removeRowButtonElement.appendChild(removeRowButtonIconElement);
+
+    var courseNumberInputElement = document.createElement("input");
+    courseNumberInputElement.className = "course-number-input semester-editor-inputs text-input";
+    courseNumberInputElement.placeholder = "Course Number...";
+
+    // Create course number data column and add remove button and input to it
+    var courseNumberDataColumn = document.createElement("td");
+    courseNumberDataColumn.appendChild(removeRowButtonElement);
+    courseNumberDataColumn.appendChild(courseNumberInputElement);
+
+    // Create elements needed for credit hour data column
+    var creditHoursInputElement = document.createElement("input");
+    creditHoursInputElement.className = "credit-hours-input semester-editor-inputs text-input";
+    creditHoursInputElement.placeholder = "Credit Hours...";
+
+    // Create credit hours data column and add credit hours input to it
+    var creditHoursDataColumn = document.createElement("td");
+    creditHoursDataColumn.appendChild(creditHoursInputElement);
+
+    // Create first table row element and add the table data columns to it
+    var firstDataRowElement = document.createElement("tr");
+    firstDataRowElement.className = "data-row";
+    firstDataRowElement.appendChild(courseNumberDataColumn);
+    firstDataRowElement.appendChild(creditHoursDataColumn);
+
+    // Append table data to table element
+    semesterTableElement.appendChild(firstDataRowElement);
+
+    addRemoveRowButtonEventListeners();
+    addCourseNumberInputEventListeners();
+    addUpdateSemesterCreditCountEventListeners();
 }
 
 /*
@@ -200,10 +314,11 @@ function addSemester(semesterEditorHTML)
 
     // Create first table row element and add the table data columns to it
     var firstDataRowElement = document.createElement("tr");
+    firstDataRowElement.className = "data-row";
     firstDataRowElement.appendChild(courseNumberDataColumn);
     firstDataRowElement.appendChild(creditHoursDataColumn);
 
-    // Append table elements to table element
+    // Append table data to table element
     semesterTableElement.appendChild(tableHeaderRowElement);
     semesterTableElement.appendChild(firstDataRowElement);
 
@@ -236,14 +351,11 @@ function addSemester(semesterEditorHTML)
     // Scroll down to newly added semester editor card
     location.hash = "#" + "new-semester";
 
-    addRemoveSemesterEventListeners()
-
-    // Get template HTML for semester editor data row
-    var dataRowHTML = document.getElementsByClassName("data-row")[0].outerHTML;
-
-    addAddRowEventListeners(dataRowHTML)
-    addRemoveRowButtonEventListeners()
-    addCourseNumberInputEventListeners()
+    addRemoveSemesterEventListeners();
+    addAddRowEventListeners();
+    addRemoveRowButtonEventListeners();
+    addCourseNumberInputEventListeners();
+    addUpdateSemesterCreditCountEventListeners();
 }
 
 /*
@@ -251,6 +363,7 @@ Parses the course number as it is entered and extracts the number of credit hour
 */
 function extractCreditHours()
 {
+    // Regex search strings for extracting data from inputs
     var courseRegex = /[a-zA-z&]+\s*[0-9]{3,4}/g;
     var courseDigitsRegex = /[0-9]+/g;
     var courseSubjectRegex = /[a-zA-z]+/g;
