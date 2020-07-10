@@ -149,8 +149,17 @@ function updateSemesterCreditCount(input)
     // Get current semester editor
     var semesterEditor = input.parentNode.parentNode.parentNode.parentNode;
 
+    // Check to see if the current element is not a semester editor. If it's not, THAT parent element should be used
+    if (semesterEditor.className !== "semester-editor card")
+    {
+        semesterEditor = semesterEditor.parentNode;
+    }
+
     // Get the semester credit count element
     var semesterCreditCountElement = semesterEditor.getElementsByClassName("semester-credit-count")[0];
+
+    // Get the current hours number being displayed
+    var currentHoursDisplay = semesterCreditCountElement.textContent;
 
     // Get all credit hour inputs in the current semester editor
     var creditHourInputs = semesterEditor.getElementsByClassName("credit-hours-input semester-editor-inputs text-input");
@@ -164,7 +173,17 @@ function updateSemesterCreditCount(input)
             hours += parseInt(creditHourInputs[count].value);
         }
     }
-    semesterCreditCountElement.textContent = hours;
+
+    // If hours is NaN, display the current value being displayed
+    if (isNaN(hours))
+    {
+        semesterCreditCountElement.textContent = currentHoursDisplay;
+    }
+    // If hours is a valid number, then display that number
+    else
+    {
+        semesterCreditCountElement.textContent = hours;
+    }
 }
 
 /*
