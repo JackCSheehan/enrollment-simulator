@@ -25,7 +25,7 @@ function init()
     var dataRowHTML = document.getElementsByClassName("data-row")[0].outerHTML;
 
     // Add event listener to first add row button
-    document.getElementsByClassName("add-row-button")[0].addEventListener("click", function()
+    document.getElementsByClassName("add-row-button")[0].addEventListener("mouseup", function()
     {
         addRow(this);
     });
@@ -37,15 +37,15 @@ function init()
     })
 
     // Add event listener to first course number input
-    document.getElementsByClassName("course-number-input")[0].addEventListener("input", extractCreditHours);
+    document.getElementsByClassName("course-number-input semester-editor-inputs text-input")[0].addEventListener("input", extractCreditHours);
 
     // Add event listener to first credit hour input and the first course number input
-    document.getElementsByClassName("credit-hours-input")[0].addEventListener("input", function()
+    document.getElementsByClassName("credit-hours-input semester-editor-inputs text-input")[0].addEventListener("input", function()
     {
         updateSemesterCreditCount(this);
     });
 
-    document.getElementsByClassName("course-number-input")[0].addEventListener("input", function()
+    document.getElementsByClassName("course-number-input semester-editor-inputs text-input")[0].addEventListener("input", function()
     {
         updateSemesterCreditCount(this);
     });
@@ -86,7 +86,7 @@ function addAddRowEventListeners()
     var addRowButtons = document.getElementsByClassName("add-row-button");
     for (var count = 0; count < addRowButtons.length; count++)
     {
-        addRowButtons[count].addEventListener("click", function()
+        addRowButtons[count].addEventListener("mouseup", function()
         {
             addRow(this);
         });
@@ -111,25 +111,26 @@ Add event listeners to every credit hour input and course number input to update
 function addUpdateSemesterCreditCountEventListeners()
 {
     // Get all the credit hour inputs
-    var creditHourInputs = document.getElementsByClassName("credit-hours-input");
+    var creditHourInputs = document.getElementsByClassName("credit-hours-input semester-editor-inputs text-input");
 
     // Iterate through each credit hour input and add the event listeners
     for (var count = 0; count < creditHourInputs.length; count++)
     {
         creditHourInputs[count].addEventListener("input", function()
         {
-            updateSemesterCreditCount(creditHourInputs[count]);
+            updateSemesterCreditCount(this);
         });
     }
 
     // Get course number inputs
-    var courseNumberInputs = document.getElementsByClassName("course-number-input");
+    var courseNumberInputs = document.getElementsByClassName("course-number-input semester-editor-inputs text-input");
+    
     // Iterate through each course number input and add the event listeners
     for (var count = 0; count < courseNumberInputs.length; count++)
     {
         courseNumberInputs[count].addEventListener("input", function()
         {
-            updateSemesterCreditCount(creditHourInputs[count]);
+            updateSemesterCreditCount(this);
         });
     }
 }
@@ -137,7 +138,7 @@ function addUpdateSemesterCreditCountEventListeners()
 /*
 Updates the count of credit hours under each semester editor.
 */
-function updateSemesterCreditCount(creditHourInput)
+function updateSemesterCreditCount(input)
 {
     // Declare variable to accumulate credit hours in the current semester editor
     var hours = 0;
@@ -146,7 +147,7 @@ function updateSemesterCreditCount(creditHourInput)
     var numberSearch = /[^0-9]+/g;
 
     // Get current semester editor
-    var semesterEditor = creditHourInput.parentNode.parentNode.parentNode.parentNode.parentNode;
+    var semesterEditor = input.parentNode.parentNode.parentNode.parentNode;
 
     // Get the semester credit count element
     var semesterCreditCountElement = semesterEditor.getElementsByClassName("semester-credit-count")[0];
@@ -332,6 +333,20 @@ function addSemester(semesterEditorHTML)
 
     addNewRowButton.appendChild(addNewRowButtonIcon);
 
+    // Create total hours counter
+    var creditHoursCounterLabelElement = document.createElement("span");
+    creditHoursCounterLabelElement.className = "semester-credit-count-label";
+    creditHoursCounterLabelElement.appendChild(document.createTextNode("Total Hours: "));
+
+    var creditCountElement = document.createElement("span");
+    creditCountElement.className = "semester-credit-count";
+    creditCountElement.appendChild(document.createTextNode("0"));
+
+    var creditHoursCounterDivElement = document.createElement("div");
+    creditHoursCounterDivElement.className = "semester-credit-count-wrapper";
+    creditHoursCounterDivElement.appendChild(creditHoursCounterLabelElement);
+    creditHoursCounterDivElement.appendChild(creditCountElement);
+
     // Get div to append new semester editor to
     var semesterEditorWrapper = document.getElementById("semester-editor-wrapper");
 
@@ -344,6 +359,7 @@ function addSemester(semesterEditorHTML)
     semesterEditorCardDivElement.appendChild(removeSemesterButtonElement);
     semesterEditorCardDivElement.appendChild(semesterTableElement);
     semesterEditorCardDivElement.appendChild(addNewRowButton);
+    semesterEditorCardDivElement.appendChild(creditHoursCounterDivElement);
 
     // Append created semester editor to the semester editor wrapper
     semesterEditorWrapper.appendChild(semesterEditorCardDivElement);
