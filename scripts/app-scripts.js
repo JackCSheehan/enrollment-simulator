@@ -1,17 +1,18 @@
 document.addEventListener("DOMContentLoaded", init);
+window.onload = function()
+{
+    reload();
+};
 
 /*
 Init routines for app section.
 */
 function init()
 {
-    // Get template HTML for semester editor
-    var semesterEditorHTML = document.getElementById("semester-editor-wrapper").innerHTML;
-
     // Add event listener to add semester button
     document.getElementById("add-semester-button").addEventListener("click", function()
     {
-        addSemester(semesterEditorHTML);
+        addSemester();
     })
 
     // Add event listener to each remove semester button
@@ -20,9 +21,6 @@ function init()
     {
         removeSemesterButtons[count].addEventListener("click", removeSemester);
     }
-
-    // Get template HTML for semester editor data row
-    var dataRowHTML = document.getElementsByClassName("data-row")[0].outerHTML;
 
     // Add event listener to first add row button
     document.getElementsByClassName("add-row-button")[0].addEventListener("mouseup", function()
@@ -49,6 +47,16 @@ function init()
     {
         updateSemesterCreditCount(this);
     });
+}
+
+/*
+Routines to execute on page reload
+*/
+function reload()
+{
+    // Clear course number and credit hours inputs so values consistently clear on reload
+    document.getElementsByClassName("course-number-input").value = "";
+    document.getElementsByClassName("credit-hours-input").value = "";
 }
 
 /*
