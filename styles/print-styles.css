@@ -1,0 +1,39 @@
+/*
+Styles for printing document.
+*/
+
+@media print
+{
+    .submit
+    {
+        color: white;
+    }
+
+    #navbar
+    {
+        background-color: #121267;
+    }
+    
+    #about-link
+    {
+        display: none;
+    }
+}
+
+@media print and (-webkit-min-device-pixel-ratio:0)
+{
+    .submit
+    {
+        color: white;
+    }
+
+    #navbar
+    {
+        background-color: #121267;
+    }
+
+    #about-link
+    {
+        display: none;
+    }
+}

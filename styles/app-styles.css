@@ -5,6 +5,8 @@
 
 #goal-hours-input
 {
+    width: 10%;
+
     margin-top: 2%;
 }
 
@@ -125,4 +127,9 @@ The borders in the semester editor are simply disabled.
     margin-top: 20px;
     
     font-size: 20px;
+}
+
+#pdf-download-button
+{
+    
 }

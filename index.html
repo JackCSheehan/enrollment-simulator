@@ -10,10 +10,13 @@
         <link rel="stylesheet" href="styles/main-styles.css">
         <link rel="stylesheet" href="styles/navbar-styles.css">
         <link rel="stylesheet" href="styles/app-styles.css">
+        <link rel="stylesheet" href="styles/stats-styles.css">
+        <link rel="stylesheet" href="styles/print-styles.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Molle:ital@1&family=Open+Sans&display=swap"> 
 
-        <script type="text/javascript" stc="scripts/stats-scripts.js"></script>
+        <script type="text/javascript" src="scripts/download-scripts.js"></script>
         <script type="text/javascript" src="scripts/app-scripts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js" integrity="sha384-NaWTHo/8YCBYJ59830LTz/P4aQZK1sS0SneOgAvhsIl3zBu8r9RevNg5lHCHAuQ/" crossorigin="anonymous"></script>
     </head>
 
     <body>
@@ -24,20 +27,16 @@
             <div id="navbar-tagline">
                 The free college course planning tool
             </div>
-
-            <span id="about-link">
-                About
-            </span>
         </div>
         
         <!--Div for main app-->
         <div id="app">
-            <input id="goal-hours-input" class="text-input" placeholder="Goal Hours...">
+            <input id="goal-hours-input" class="text-input" placeholder="Goal Hours..." autocomplete="off">
 
             <!--Div for semester editors-->
             <div id="semester-editor-wrapper">
                 <div class="semester-editor card">
-                    <input class="semester-title-input text-input" placeholder="Semester...">    
+                    <input class="semester-title-input text-input" placeholder="Semester..." autocomplete="off">    
 
                     <button class="remove-semester-button icon-button">
                         <img class="remove-semester-button-icon" src="images/close.svg">
@@ -54,11 +53,11 @@
                                 <button class="remove-row-button icon-button">
                                     <img class="remove-row-button-icon" src="images/close.svg">
                                 </button>
-                                <input class="course-number-input semester-editor-inputs text-input" placeholder="Course Number...">
+                                <input class="course-number-input semester-editor-inputs text-input" placeholder="Course Number..." autocomplete="off">
                             </td>
 
                             <td>
-                                <input class="credit-hours-input semester-editor-inputs text-input" placeholder="Credit Hours...">
+                                <input class="credit-hours-input semester-editor-inputs text-input" placeholder="Credit Hours..." autocomplete="off">
                             </td>
                         </tr>
                     </table>
@@ -78,13 +77,30 @@
             <input type="submit" id="add-semester-button" class="submit" value="Add Semester">
         </div>
 
-        <!--Div for stat cards-->
-        <div id="stats">
-            <button id="html-download" class="submit">Download as HTML</button>
-            <button id="pdf-download" class="submit">Download as PDF</button>
-            <button id="text-download" class="submit">Download as Text</button>
+        <!--Div for stats-->
+        <div id="stat-cards-wrapper">
+            <div id="stat-card" class="card">
+                <div id="total-hours-div">
+                    <div class="stat-body">
+                        0
+                    </div>
+                    <div class="stat-caption">
+                        Total Credit Hours
+                    </div>
+                </div>
+
+                <div id="goal-hours-div">
+                    <div class="stat-body">
+                        0
+                    </div>
+                    <div class="stat-caption">
+                        Please Provide a Goal Hour
+                    </div>
+                </div>
+            </div>
+            
         </div>
-        
+        <button id="pdf-download-button" class="submit">Download as PDF</button>
     </body>
 
 

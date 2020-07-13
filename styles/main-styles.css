@@ -37,9 +37,10 @@ html, body
 .submit
 {
     font-size:  18px;
-    color: white;
+    color: white !important;
 
     background-color: #121267;
+    -webkit-print-color-adjust: exact !important;
 
     padding-top: 12px;
     padding-bottom: 12px;

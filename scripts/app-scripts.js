@@ -1,27 +1,22 @@
 document.addEventListener("DOMContentLoaded", init);
-window.onload = function()
-{
-    reload();
-};
 
 /*
 Init routines for app section.
 */
 function init()
 {
+    // Add event listener to goal hours input
+    document.getElementById("goal-hours-input").addEventListener("input", updateGlobalStats);
+
     // Add event listener to add semester button
     document.getElementById("add-semester-button").addEventListener("click", function()
     {
         addSemester();
     })
 
-    // Add event listener to each remove semester button
-    var removeSemesterButtons = document.getElementsByClassName("remove-semester-button");
-    for (var count = 0; count < removeSemesterButtons.length; count++)
-    {
-        removeSemesterButtons[count].addEventListener("click", removeSemester);
-    }
-
+    // Add event listener to first remove semester button
+    document.getElementsByClassName("remove-semester-button")[0].addEventListener("click", removeSemester);
+    
     // Add event listener to first add row button
     document.getElementsByClassName("add-row-button")[0].addEventListener("mouseup", function()
     {
@@ -29,118 +24,44 @@ function init()
     });
 
     // Add event listener to first remove row button
-    document.getElementsByClassName("remove-row-button")[0].addEventListener("click", function() 
+    var firstRemoveRowButton = document.getElementsByClassName("remove-row-button")[0];
+    firstRemoveRowButton.addEventListener("mouseup", function()
     {
         removeRow(this);
-    })
-
-    // Add event listener to first course number input
-    document.getElementsByClassName("course-number-input semester-editor-inputs text-input")[0].addEventListener("input", extractCreditHours);
-
-    // Add event listener to first credit hour input and the first course number input
-    document.getElementsByClassName("credit-hours-input semester-editor-inputs text-input")[0].addEventListener("input", function()
-    {
-        updateSemesterCreditCount(this);
     });
-
-    document.getElementsByClassName("course-number-input semester-editor-inputs text-input")[0].addEventListener("input", function()
-    {
-        updateSemesterCreditCount(this);
-    });
-}
-
-/*
-Routines to execute on page reload
-*/
-function reload()
-{
-    // Clear course number and credit hours inputs so values consistently clear on reload
-    document.getElementsByClassName("course-number-input").value = "";
-    document.getElementsByClassName("credit-hours-input").value = "";
-}
-
-/*
-Add event listeners to all remove row buttons.
-*/
-function addRemoveRowButtonEventListeners()
-{
-    var dataRows = document.getElementsByClassName("remove-row-button");
-    for (var count = 0; count < dataRows.length; count++)
-    {
-        dataRows[count].addEventListener("click", function()
-        {
-            removeRow(this);
-        });
-    }
-}
-
-/*
-Add event listener to each remove semester button
-*/
-function addRemoveSemesterEventListeners()
-{
-    var removeSemesterButtons = document.getElementsByClassName("remove-semester-button");
-    for (var count = 0; count < removeSemesterButtons.length; count++)
-    {
-        removeSemesterButtons[count].addEventListener("click", removeSemester);
-    }
-}
-
-/*
-Add event listener to each add row button
-*/
-function addAddRowEventListeners()
-{
-    var addRowButtons = document.getElementsByClassName("add-row-button");
-    for (var count = 0; count < addRowButtons.length; count++)
-    {
-        addRowButtons[count].addEventListener("mouseup", function()
-        {
-            addRow(this);
-        });
-    }
-}
-
-/*
-Add event listeners to every course number input.
-*/
-function addCourseNumberInputEventListeners()
-{
-    var courseNumberInputs = document.getElementsByClassName("course-number-input");
-    for (var count = 0; count < courseNumberInputs.length; count++)
-    {
-        courseNumberInputs[count].addEventListener("input", extractCreditHours)
-    }
-}
-
-/*
-Add event listeners to every credit hour input and course number input to update the counter.
-*/
-function addUpdateSemesterCreditCountEventListeners()
-{
-    // Get all the credit hour inputs
-    var creditHourInputs = document.getElementsByClassName("credit-hours-input semester-editor-inputs text-input");
-
-    // Iterate through each credit hour input and add the event listeners
-    for (var count = 0; count < creditHourInputs.length; count++)
-    {
-        creditHourInputs[count].addEventListener("input", function()
-        {
-            updateSemesterCreditCount(this);
-        });
-    }
-
-    // Get course number inputs
-    var courseNumberInputs = document.getElementsByClassName("course-number-input semester-editor-inputs text-input");
     
-    // Iterate through each course number input and add the event listeners
-    for (var count = 0; count < courseNumberInputs.length; count++)
+    // Add event listeners to first course number input
+    var firstCourseNumberInput = document.getElementsByClassName("course-number-input")[0];
+    firstCourseNumberInput.addEventListener("input", extractCreditHours);
+    firstCourseNumberInput.addEventListener("input", function()
     {
-        courseNumberInputs[count].addEventListener("input", function()
+        updateSemesterCreditCount(this);
+        updateGlobalStats();
+    });
+    firstCourseNumberInput.addEventListener("keydown", function(event)
+    {
+        // If the user pressed the enter key, add a row
+        if (event.keyCode === 13)
         {
-            updateSemesterCreditCount(this);
-        });
-    }
+            addRow(this.parentNode.parentNode.parentNode.parentNode.parentNode.getElementsByClassName("add-row-button")[0]);
+        }
+    });
+
+    // Add event listeners to first credit hours input
+    var firstCreditHoursInput = document.getElementsByClassName("credit-hours-input")[0];
+    firstCreditHoursInput.addEventListener("input", function()
+    {
+        updateSemesterCreditCount(this);
+        updateGlobalStats();
+    });
+    firstCreditHoursInput.addEventListener("keydown", function(event)
+    {
+        // If the user pressed the enter key, add a row
+        if (event.keyCode === 13)
+        {
+            addRow(this.parentNode.parentNode.parentNode.parentNode.parentNode.getElementsByClassName("add-row-button")[0]);
+        }
+    });
 }
 
 /*
@@ -212,6 +133,10 @@ function addRow(button)
     // Create elements needed for course number data column
     var removeRowButtonElement = document.createElement("button");
     removeRowButtonElement.className = "remove-row-button icon-button";
+    removeRowButtonElement.addEventListener("mouseup", function()
+    {
+        removeRow(this);
+    });
 
     var removeRowButtonIconElement = document.createElement("img");
     removeRowButtonIconElement.className = "remove-row-button-icon";
@@ -222,6 +147,20 @@ function addRow(button)
     var courseNumberInputElement = document.createElement("input");
     courseNumberInputElement.className = "course-number-input semester-editor-inputs text-input";
     courseNumberInputElement.placeholder = "Course Number...";
+    courseNumberInputElement.addEventListener("input", extractCreditHours);
+    courseNumberInputElement.addEventListener("input", function()
+    {
+        updateSemesterCreditCount(this);
+        updateGlobalStats();
+    });
+    courseNumberInputElement.addEventListener("keydown", function(event)
+    {
+        // Check to see if the enter key was pressed before adding row
+        if (event.keyCode === 13)
+        {
+            addRow(button);
+        }
+    });
 
     // Create course number data column and add remove button and input to it
     var courseNumberDataColumn = document.createElement("td");
@@ -232,6 +171,19 @@ function addRow(button)
     var creditHoursInputElement = document.createElement("input");
     creditHoursInputElement.className = "credit-hours-input semester-editor-inputs text-input";
     creditHoursInputElement.placeholder = "Credit Hours...";
+    creditHoursInputElement.addEventListener("input", function()
+    {
+        updateSemesterCreditCount(this);
+        updateGlobalStats();
+    });
+    creditHoursInputElement.addEventListener("keydown", function(event)
+    {
+        // Check to see if the enter key was pressed before adding row
+        if (event.keyCode === 13)
+        {
+            addRow(button);
+        }
+    });
 
     // Create credit hours data column and add credit hours input to it
     var creditHoursDataColumn = document.createElement("td");
@@ -245,10 +197,6 @@ function addRow(button)
 
     // Append table data to table element
     semesterTableElement.appendChild(firstDataRowElement);
-
-    addRemoveRowButtonEventListeners();
-    addCourseNumberInputEventListeners();
-    addUpdateSemesterCreditCountEventListeners();
 }
 
 /*
@@ -261,10 +209,18 @@ function removeRow(button)
 
     // Get the current semester editor
     var semesterEditor = currentRow.parentNode.parentNode;
+
+    // Get the credit hours input in the same row as this remove row button
+    var creditHoursInput = currentRow.getElementsByClassName("credit-hours-input")[0];
     
     // Make sure that there are at least more than one data row before removing
     if (semesterEditor.getElementsByClassName("data-row").length > 1)
     {
+        // Set the value of the credit hours input and update the credit hours counter before removing row
+        creditHoursInput.value = "0";
+        updateSemesterCreditCount(creditHoursInput);
+        updateGlobalStats();
+
         currentRow.parentNode.removeChild(currentRow);
     }
 }
@@ -274,13 +230,21 @@ Removes selected semester editor.
 */
 function removeSemester()
 {
-    this.parentNode.parentNode.removeChild(this.parentNode);
+    // Get the wrapper that contains all semester editor cards
+    var semesterEditorWrapper = this.parentNode.parentNode;
+    
+    // Make sure that there are at least more than one semester before removing
+    if (semesterEditorWrapper.getElementsByClassName("semester-editor card").length > 1)
+    {
+        semesterEditorWrapper.removeChild(this.parentNode);
+    }
+    
 }
 
 /*
 This function adds a new empty semester editor.
 */
-function addSemester(semesterEditorHTML)
+function addSemester()
 {
     // Create elements needed to add a new semester card to the div
     var semesterTitleInputElement = document.createElement("input");
@@ -289,6 +253,7 @@ function addSemester(semesterEditorHTML)
 
     var removeSemesterButtonElement = document.createElement("button");
     removeSemesterButtonElement.className = "remove-semester-button icon-button";
+    removeSemesterButtonElement.addEventListener("click", removeSemester);
 
     var removeSemesterButtonIconElement = document.createElement("img");
     removeSemesterButtonIconElement.className = "remove-semester-button-icon";
@@ -315,6 +280,10 @@ function addSemester(semesterEditorHTML)
     // Create elements needed for course number data column
     var removeRowButtonElement = document.createElement("button");
     removeRowButtonElement.className = "remove-row-button icon-button";
+    removeRowButtonElement.addEventListener("mouseup", function()
+    {
+        removeRow(this);
+    });
 
     var removeRowButtonIconElement = document.createElement("img");
     removeRowButtonIconElement.className = "remove-row-button-icon";
@@ -325,6 +294,20 @@ function addSemester(semesterEditorHTML)
     var courseNumberInputElement = document.createElement("input");
     courseNumberInputElement.className = "course-number-input semester-editor-inputs text-input";
     courseNumberInputElement.placeholder = "Course Number...";
+    courseNumberInputElement.addEventListener("input", extractCreditHours);
+    courseNumberInputElement.addEventListener("input", function()
+    {
+        updateSemesterCreditCount(this);
+        updateGlobalStats();
+    });
+    courseNumberInputElement.addEventListener("keydown", function(event)
+    {
+        // If the user pressed the enter key, add a row
+        if (event.keyCode === 13)
+        {
+            addRow(this.parentNode.getElementsByClassName("add-row-button")[0]);
+        }
+    });
 
     // Create course number data column and add remove button and input to it
     var courseNumberDataColumn = document.createElement("td");
@@ -335,6 +318,19 @@ function addSemester(semesterEditorHTML)
     var creditHoursInputElement = document.createElement("input");
     creditHoursInputElement.className = "credit-hours-input semester-editor-inputs text-input";
     creditHoursInputElement.placeholder = "Credit Hours...";
+    creditHoursInputElement.addEventListener("input", function()
+    {
+        updateSemesterCreditCount(this);
+        updateGlobalStats();
+    });
+    creditHoursInputElement.addEventListener("keydown", function(event)
+    {
+        // Check to see if the enter key was pressed before adding row
+        if (event.keyCode === 13)
+        {
+            addRow(this.parentNode.getElementsByClassName("add-row-button")[0]);
+        }
+    });
 
     // Create credit hours data column and add credit hours input to it
     var creditHoursDataColumn = document.createElement("td");
@@ -353,10 +349,15 @@ function addSemester(semesterEditorHTML)
     // Create button to add a new row
     var addNewRowButton = document.createElement("button");
     addNewRowButton.className = "add-row-button icon-button";
+    addNewRowButton.addEventListener("mouseup", function()
+    {
+        addRow(this);
+    });
 
     var addNewRowButtonIcon = document.createElement("img");
     addNewRowButtonIcon.className = "add-row-button-icon";
     addNewRowButtonIcon.src = "images/add.png";
+    addNewRowButton
 
     addNewRowButton.appendChild(addNewRowButtonIcon);
 
@@ -393,12 +394,6 @@ function addSemester(semesterEditorHTML)
 
     // Scroll down to newly added semester editor card
     location.hash = "#" + "new-semester";
-
-    addRemoveSemesterEventListeners();
-    addAddRowEventListeners();
-    addRemoveRowButtonEventListeners();
-    addCourseNumberInputEventListeners();
-    addUpdateSemesterCreditCountEventListeners();
 }
 
 /*
@@ -453,6 +448,77 @@ function extractCreditHours()
 
             // Once hours have been found, set the value of the hours input to the found hours
             creditHoursInput.value = hours;
+        }
+    }
+}
+
+/*
+Updates the total hours and goal hours stats at the bottom of the page.
+*/
+function updateGlobalStats()
+{
+    // Declare counter for hours
+    var hours = 0;
+
+    // Get the total hours stat div
+    var totalHoursStatDiv = document.getElementById("total-hours-div").getElementsByClassName("stat-body")[0];
+
+    // Get all of the semester credit hour counts from each semester editor
+    var semesterCreditCountElements = document.getElementsByClassName("semester-credit-count");
+    console.log(semesterCreditCountElements);
+
+    // Iterate through each count element and tally up the total hours
+    for (var count = 0; count < semesterCreditCountElements.length; count++)
+    {
+        hours += parseInt(semesterCreditCountElements[count].textContent);
+    }
+
+    // Set text content of total hours stat div
+    totalHoursStatDiv.textContent = hours;
+
+    // After updating the total hours, update the goal hours stat
+
+    // Get the goal hours stat body and caption
+    var goalHoursStatBodyElement = document.getElementsByClassName("stat-body")[1];
+    var goalHoursStatCaptionElement = document.getElementsByClassName("stat-caption")[1];
+
+    // Get the goal hours 
+    var goalHours = parseInt(document.getElementById("goal-hours-input").value);
+
+    // Calculate difference in hours
+    var hourDifference = goalHours - hours;
+
+    // Change goal hour stats body/caption based on sign of hour difference
+    if (hourDifference >= 0)
+    {
+        // If the hour difference is positive, show difference as-is an show "from" caption
+        goalHoursStatBodyElement.textContent = hourDifference;
+
+        // If there is only one hour left, show hour as singular
+        if (hourDifference === 1)
+        {
+            goalHoursStatCaptionElement.textContent = "Hour From Goal";
+        }
+        // Otherwise, show hours as plural
+        else
+        {
+            goalHoursStatCaptionElement.textContent = "Hours From Goal";
+        }
+    }
+    else
+    {
+        // If the hour difference is negative, show difference * -1 and show "over" caption
+        goalHoursStatBodyElement.textContent = hourDifference * -1;
+
+        // If there is only one hour above, show hour as singular
+        if (hourDifference === -1)
+        {
+            goalHoursStatCaptionElement.textContent = "Hour Above Goal";
+        }
+        // Otherwise, show hours as plural
+        else
+        {
+            goalHoursStatCaptionElement.textContent = "Hours Above Goal";
         }
     }
 }
