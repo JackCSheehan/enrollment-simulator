@@ -33,3 +33,21 @@
 {
     grid-column: 2;
 }
+
+@media screen and (max-width: 900px)
+{
+    #goal-hours-div
+    {
+        grid-column: 1;
+        grid-row: 2;
+    }
+}
+
+@media screen and (max-width: 600px)
+{
+    #stat-card
+    {
+        width: 80%;
+        margin-top: 10%;
+    }
+}

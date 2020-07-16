@@ -28,3 +28,52 @@
 
     padding-left: 53px;
 }
+
+@media screen and (max-width: 800px)
+{
+    #navbar
+    {
+        text-align: center;
+    }
+
+    #navbar-tagline
+    {
+        padding-left: 20px;
+    }
+}
+
+@media screen and (max-width: 500px)
+{
+    #navbar
+    {
+        height: 60px;
+    }
+
+    #navbar-title
+    {
+        font-size: 30px;
+    }
+
+    #navbar-tagline
+    {
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 400px)
+{
+    #navbar
+    {
+        height: 50px;
+    }
+    
+    #navbar-title
+    {
+        font-size: 25px;
+    }
+
+    #navbar-tagline
+    {
+        font-size: 15px;
+    }
+}
