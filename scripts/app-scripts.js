@@ -197,6 +197,9 @@ function addRow(button)
 
     // Append table data to table element
     semesterTableElement.appendChild(firstDataRowElement);
+
+    // Focus the new course number input
+    courseNumberInputElement.focus();
 }
 
 /*
@@ -482,8 +485,19 @@ function updateGlobalStats()
     var goalHoursStatBodyElement = document.getElementsByClassName("stat-body")[1];
     var goalHoursStatCaptionElement = document.getElementsByClassName("stat-caption")[1];
 
+    // Get the current hours number being displayed
+    var currentHoursDisplay = goalHoursStatBodyElement.textContent;
+
     // Get the goal hours 
     var goalHours = parseInt(document.getElementById("goal-hours-input").value);
+
+    // If goal hours is NaN (no value or is invalid), revert caption to default and return from function
+    if (isNaN(goalHours))
+    {
+        goalHoursStatBodyElement.textContent = "0";
+        goalHoursStatCaptionElement.textContent = "Please Provide a Goal Hour";
+        return;
+    }
 
     // Calculate difference in hours
     var hourDifference = goalHours - hours;
@@ -520,5 +534,16 @@ function updateGlobalStats()
         {
             goalHoursStatCaptionElement.textContent = "Hours Above Goal";
         }
+    }
+
+    // If hours difference is NaN, display the current value being displayed
+    if (isNaN(hourDifference))
+    {
+        goalHoursStatBodyElement.textContent = currentHoursDisplay;
+    }
+    // If hours difference is a valid number, then display that number
+    else
+    {
+        goalHoursStatBodyElement.textContent = hourDifference;
     }
 }
