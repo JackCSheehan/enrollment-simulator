@@ -185,24 +185,16 @@ The borders in the semester editor are simply disabled.
     .course-number-input, .credit-hours-input, #goal-hours-input
     {
         width: 100px;
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .semester-title-input
     {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     th
     {
         font-size: 20px;
     }
-}
-
-@media screen and (max-width: 350px)
-{
-    .course-number-input, .credit-hours-input, #goal-hours-input, .semester-title-input
-    {
-        font-size: 12px;
-    } 
 }
