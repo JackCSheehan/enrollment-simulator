@@ -359,7 +359,7 @@ function addSemester()
 
     var addNewRowButtonIcon = document.createElement("img");
     addNewRowButtonIcon.className = "add-row-button-icon";
-    addNewRowButtonIcon.src = "images/add.png";
+    addNewRowButtonIcon.src = "images/add.svg";
     addNewRowButton
 
     addNewRowButton.appendChild(addNewRowButtonIcon);
